@@ -12,17 +12,17 @@ class StubbedCallbackManager extends NetworkCallbackManager {
 	
 	@Override
 	public void onConnect() {
-		this.logger.info("Callbacks (stub): Connected to server successfully");
+		this.logger.error("Callbacks (stub): Connected to server successfully");
 	}
 
 	@Override
 	public void onDisconnect() {
-		this.logger.info("Callbacks (stub): Disconnected from server!");
+		this.logger.error("Callbacks (stub): Disconnected from server!");
 	}
 
 	@Override
 	public void onConnectFailure(int id) {
-		this.logger.info("Callbacks (stub): Failed to connect to server, an error has occurred. Code: " + id);
+		this.logger.error("Callbacks (stub): Failed to connect to server, an error has occurred. Code: " + id);
 		for (DisconnectCodes code : DisconnectCodes.values()) {
 			if (code.getId() == id) {
 				this.logger.info("Callbacks (stub): " + code.getMessage());
@@ -33,7 +33,7 @@ class StubbedCallbackManager extends NetworkCallbackManager {
 
 	@Override
 	public void onPacketReceive(PacketBase base) {
-		this.logger.info("Callbacks (stub): Received Packet! {@CLASS=" + base.getClass().getSimpleName() + "@ID=" + base.getId() + "@NAME=" + base.getName() + "}, Discarding.");
+		this.logger.error("Callbacks (stub): Received Packet! {@CLASS=" + base.getClass().getSimpleName() + "@ID=" + base.getId() + "@NAME=" + base.getName() + "}, Discarding.");
 	}
 
 }

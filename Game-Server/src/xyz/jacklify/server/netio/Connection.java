@@ -77,8 +77,11 @@ public class Connection extends ChannelHandlerAdapter {
 					}
 					}
 					this.server.removeUnauthenticatedPeer(this);
+					ctx.writeAndFlush(login);
 					if (this.server.handleConnect(this.handler, login)) {
 						
+					} else {
+						System.out.println("Nooo!");
 					}
  				} else {
 					this.logger.error("Connection: (channelRead): Protocol Violation! Client [" + this.handler.getIP() + ":" + this.handler.getPort() +"] tried to send another packet then Packet0Login before authenticating. Disconnecting..");

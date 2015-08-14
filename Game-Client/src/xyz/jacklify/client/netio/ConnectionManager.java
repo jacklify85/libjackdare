@@ -26,15 +26,18 @@ public class ConnectionManager extends ChannelHandlerAdapter{
 		// Send Packet0Login
 		Packet0Login login = new Packet0Login(this.protocolVersion, this.gameVersion, this.extraData);
 		ctx.writeAndFlush(login);
+		this.icm.mgr.onConnect();
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
+		this.icm.mgr.onDisconnect();
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		this.icm.mgr.onPacketReceive((PacketBase)msg);
 		if (!(msg instanceof PacketBase)) {
 			super.channelRead(ctx, msg);
 		} else {

@@ -11,14 +11,17 @@ import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import xyz.jacklify.client.netio.NetChannelHandler;
+import xyz.jacklify.client.netio.Packet0Login;
+import xyz.jacklify.client.netio.Packet1Kick;
 import xyz.jacklify.netutils.EasyProperties;
+import xyz.jacklify.netutils.PacketFactory;
 
 public class InternalClientManager {
 	
 	private final String protocolVersion = "libjackdare-alpha-test";
 	private String gameVersion = null;
 	
-	private NetworkCallbackManager mgr = null;
+	public NetworkCallbackManager mgr = null;
 	
 	private Logger logger = LogManager.getLogger("Game-Client");
 	private EasyProperties props = null;
@@ -34,6 +37,8 @@ public class InternalClientManager {
 			this.logger.error("Core: No NetworkCallbackManager implementation specified. Using internal StubbedCallbackManager");
 			this.mgr = new StubbedCallbackManager();
 		}
+		PacketFactory.registerPacket(0, Packet0Login.class);
+		PacketFactory.registerPacket(1, Packet1Kick.class);
 	}
 	
 	public void connect(String ip, int port, boolean allowServerSwitch, String[] extraData) {
@@ -47,17 +52,11 @@ public class InternalClientManager {
 		.handler(new NetChannelHandler(this, this.protocolVersion, props.getProperty("impl.version", "version-not-defined."), extraData))
 		.connect(ip, port);
 		
-		try {
-			future = future.awaitUninterruptibly().sync();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		if (future.cause() != null) {
 			this.logger.error("Client: Lost connection to the server. Code 8: An unexpected error has occurred.", future.cause());
 		}
 		this.logger.info("Client: Cleaning up connection");
-		future.channel().close();
+		//future.channel().close();
 	}
 	
 	public void connect(String ip, int port, boolean allowServerSwitch) {

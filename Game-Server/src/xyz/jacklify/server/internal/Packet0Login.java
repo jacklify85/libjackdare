@@ -19,6 +19,13 @@ public class Packet0Login implements PacketBase{
 	private int responseCode = 0;
 	private String optionalMsg = null;
 	
+	public Packet0Login() { }
+	
+	public Packet0Login(int responseCode, String optionalMsg) {
+		this.responseCode = responseCode;
+		this.optionalMsg = optionalMsg;
+	}
+	
 	@Override
 	public String getName() {
 		return "ILogin";

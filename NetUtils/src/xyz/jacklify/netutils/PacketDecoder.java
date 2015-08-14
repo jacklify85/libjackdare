@@ -38,6 +38,7 @@ public class PacketDecoder extends ByteToMessageDecoder{
 				arg2.add(packet);
 			} catch (Exception e) {
 				System.out.println("Got malformed packet, Kicking client");
+				e.printStackTrace();
 			}
 		}
 	}

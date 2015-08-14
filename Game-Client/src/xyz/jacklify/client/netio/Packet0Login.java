@@ -18,6 +18,8 @@ public class Packet0Login implements PacketBase {
 		this.gameVersion = gameVersion;
 		this.extraData = extraData;
 	}
+	
+	public Packet0Login() { }
 
 	@Override
 	public String getName() {
