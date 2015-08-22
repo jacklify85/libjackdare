@@ -10,10 +10,12 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import xyz.jacklify.client.netio.ConnectionManager;
 import xyz.jacklify.client.netio.NetChannelHandler;
 import xyz.jacklify.client.netio.Packet0Login;
 import xyz.jacklify.client.netio.Packet1Kick;
 import xyz.jacklify.netutils.EasyProperties;
+import xyz.jacklify.netutils.PacketBase;
 import xyz.jacklify.netutils.PacketFactory;
 
 public class InternalClientManager {
@@ -27,6 +29,7 @@ public class InternalClientManager {
 	private EasyProperties props = null;
 	
 	private Bootstrap bootstrap = null;
+	private ConnectionManager connection;
 	
 	public InternalClientManager(String gameVersion, NetworkCallbackManager mgr, EasyProperties props) {
 		this.gameVersion = gameVersion;
@@ -83,5 +86,13 @@ public class InternalClientManager {
 		
 		this.logger.info("Client: Using NIO for network handling");
 		return new NioEventLoopGroup(props.getInteger("net.threads-per-core", 4));
+	}
+	
+	public void sendPacket(PacketBase base) {
+		this.connection.send(base);
+	}
+	
+	public void setManager(ConnectionManager mgr) {
+		this.connection = mgr;
 	}
 }

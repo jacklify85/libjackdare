@@ -12,6 +12,8 @@ public class ConnectionManager extends ChannelHandlerAdapter{
 	private String protocolVersion = null;
 	private String gameVersion = null;
 	
+	private ChannelHandlerContext ctx;
+	
 	public ConnectionManager(InternalClientManager icm, String protocolVersion, String gameVersion, String[] extra) {
 		this.icm = icm;
 		this.extraData = extra;
@@ -26,6 +28,7 @@ public class ConnectionManager extends ChannelHandlerAdapter{
 		// Send Packet0Login
 		Packet0Login login = new Packet0Login(this.protocolVersion, this.gameVersion, this.extraData);
 		ctx.writeAndFlush(login);
+		this.ctx = ctx;
 		this.icm.mgr.onConnect();
 	}
 
@@ -48,5 +51,8 @@ public class ConnectionManager extends ChannelHandlerAdapter{
 		}
 	}
 
-	
+
+	public void send(PacketBase base) {
+		this.ctx.writeAndFlush(base);
+	}
 }

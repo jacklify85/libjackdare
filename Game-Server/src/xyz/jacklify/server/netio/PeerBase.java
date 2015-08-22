@@ -1,9 +1,8 @@
 package xyz.jacklify.server.netio;
 
+import xyz.jacklify.netutils.PacketBase;
+
 public abstract class PeerBase {
-	private String ipAddress = null;
-	private int outboundPort = 0;
-	
 	private Connection connection = null;
 	
 	public PeerBase(Connection connection) {
@@ -21,5 +20,9 @@ public abstract class PeerBase {
 
 	public void kick(int id, String msg) {
 		this.connection.kick(id, msg);
+	}
+	
+	public void sendPacket(PacketBase base) {
+		this.connection.getContext().writeAndFlush(base);
 	}
 }
